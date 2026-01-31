@@ -14,17 +14,30 @@ function(input, output, session) {
     
     output$distPlot <- renderPlot({
         
-        census_burglaries |> 
-            distinct(incident_number, .keep_all = TRUE) |> 
-            ggplot(aes(y = incident_occurred)) +
-            geom_histogram(bins = input$bins)
+        if(input$incident_occurred_month != "All"){
+            census_burglaries |> 
+                filter(month(incident_occurred, label = TRUE, abbr = FALSE) == input$incident_occurred_month) |> 
+                distinct(incident_number, .keep_all = TRUE) |> 
+                ggplot(aes(y = incident_occurred)) +
+                geom_histogram(bins = input$bins)
+        } else{
+            census_burglaries |> 
+                distinct(incident_number, .keep_all = TRUE) |> 
+                ggplot(aes(y = incident_occurred)) +
+                geom_histogram(bins = input$bins)
+        }
     })
     
     output$barPlot <- renderPlot({
-
+        
         census_burglaries |> 
             distinct(incident_number, .keep_all = TRUE) |> 
             ggplot(aes(y = TRACTCE)) +
             geom_bar()
+    })
+    
+    output$selectedTable <- renderDataTable({
+        
+        census_burglaries
     })
 }

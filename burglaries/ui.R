@@ -9,26 +9,33 @@
 
 library(shiny)
 
-# Define UI for application that draws a histogram
+# Define UI for application
 fluidPage(
 
     # Application title
     titlePanel("Burglaries 2023 Data"),
 
-    # Sidebar with a slider input for number of bins
+    # Sidebar for inputs
     sidebarLayout(
         sidebarPanel(
+            # Slider for number of histogram bins
             sliderInput("bins",
                         "Number of bins:",
                         min = 1,
                         max = 50,
-                        value = 30)
+                        value = 30),
+            
+            # Dropdown for month
+            selectInput("incident_occurred_month",
+                        "Select month of incident occurring:",
+                        choices = c("All", levels(month_list)))
         ),
 
-        # Show a plot of the generated distribution
+        # Display output
         mainPanel(
             plotOutput("distPlot"),
-            plotOutput("barPlot")
+            plotOutput("barPlot"),
+            dataTableOutput("selectedTable")
         )
     )
 )
