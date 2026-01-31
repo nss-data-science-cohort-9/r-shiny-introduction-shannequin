@@ -11,12 +11,20 @@ library(shiny)
 
 # Define server logic required to draw a histogram
 function(input, output, session) {
-
+    
     output$distPlot <- renderPlot({
-
+        
         census_burglaries |> 
+            distinct(incident_number, .keep_all = TRUE) |> 
             ggplot(aes(y = incident_occurred)) +
             geom_histogram(bins = input$bins)
     })
+    
+    output$barPlot <- renderPlot({
 
+        census_burglaries |> 
+            distinct(incident_number, .keep_all = TRUE) |> 
+            ggplot(aes(y = TRACTCE)) +
+            geom_bar()
+    })
 }
